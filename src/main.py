@@ -38,7 +38,7 @@ async def main(request: Request):
 async def get_documents():
     cursor = message_collection.find()
     documents = await cursor.to_list(length=None)
-    return documents
+    return documents 
 
 
 # create
