@@ -1,0 +1,23 @@
+{% for message in messages %}
+<div class="bubbles-group">
+    <div
+        {% if message['message_owner'] %}
+            class="bubble hide-name is-out can-have-tail is-group-first is-group-last"
+        {% else %}
+            class="bubble hide-name is-in can-have-tail is-group-first is-group-last"
+        {% endif %}
+        style="--peer-color-rgb: var(--peer-0-color-rgb); --peer-border-background: var(--peer-0-border-background);">
+        <div class="bubble-content-wrapper">
+            <div class="bubble-content">
+                <div class="message spoilers-container" dir="auto">
+                    {{ message['content'] }}
+                    <span
+                        class="time"><span class="i18n" dir="auto">14:06</span>
+                        <div class="time-inner"><span class="i18n"
+                                dir="auto">14:06</span></div>
+                    </span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
