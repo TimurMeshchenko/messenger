@@ -1,21 +1,19 @@
 {% for chat in chats %}
-    {% set chat_id = chat.keys() | first %}
     <a class="row no-wrap row-with-padding row-clickable hover-effect rp chatlist-chat chatlist-chat-bigger row-big"
-        href="#{{ chat_id }}" data-peer-id="{{ chat_id }}">
+        href="#{{ chat['chat_id'] }}" data-peer-id="{{ chat['chat_id'] }}">
         <div class="c-ripple"></div>
         <div class="row-row row-subtitle-row dialog-subtitle">
             <div class="row-subtitle no-wrap dialog-subtitle-flex" dir="auto"><span
-                    class="dialog-subtitle-span dialog-subtitle-span-overflow dialog-subtitle-span-last" dir="auto">Привет.
-                    Я создал конвертер из JSON в XML.
-                    Для тестирования я использовал локальный путь к
-                    шаблону в ...</span></div>
+                    class="dialog-subtitle-span dialog-subtitle-span-overflow dialog-subtitle-span-last" dir="auto">
+                    {{ chat['last_message_content'] }}
+                    </span></div>
         </div>
         <div class="row-row row-title-row dialog-title">
             <div class="row-title no-wrap user-title" dir="auto"><span class="peer-title" dir="auto"
-                    data-peer-id="{{ chat_id }}" data-from-name="0" data-dialog="1" data-only-first-name="0" data-with-icons="1"
-                    data-thread-id="0" data-me-as-notes="0">{{ chat[chat_id] }}</span></div>
+                    data-peer-id="{{ chat['chat_id'] }}" data-from-name="0" data-dialog="1" data-only-first-name="0" data-with-icons="1"
+                    data-thread-id="0" data-me-as-notes="0">{{ chat['chat_name'] }}</span></div>
             <div class="row-title row-title-right row-title-right-secondary dialog-title-details">
-                <span class="message-time"><span class="i18n" dir="auto">Jan 27</span></span>
+                <span class="message-time"><span class="i18n" dir="auto">{{ chat['last_message_date'] }}</span></span>
             </div>
         </div>
         <img class="avatar avatar-like avatar-54 dialog-avatar row-media row-media-bigger"

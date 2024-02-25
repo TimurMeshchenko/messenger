@@ -4,51 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Telegram Web</title>
-    <meta name="description"
-        content="Telegram is a cloud-based mobile and desktop messaging app with a focus on security and speed.">
+    <title>Messanger</title>
     <meta name="viewport"
         content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no,viewport-fit=cover">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-title" content="Telegram Web">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Telegram Web">
-    <meta name="application-name" content="Telegram Web">
-    <meta name="msapplication-TileColor" content="#2d89ef">
-    <meta name="msapplication-TileImage" content="assets/img/mstile-144x144.png?v=jw3mK7G9Ry">
-    <meta name="msapplication-config" content="browserconfig.xml?v=jw3mK7G9Ry">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="color-scheme" content="light">
-    <meta name="google" content="notranslate">
-    <!-- <meta name="robots" content="noindex"> -->
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://web.telegram.org/k/">
-    <meta property="og:title" content="Telegram Web">
-    <meta property="og:description"
-        content="Telegram is a cloud-based mobile and desktop messaging app with a focus on security and speed.">
-    <meta property="og:image" content="assets/img/android-chrome-192x192.png?v=jw3mK7G9Ry">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://web.telegram.org/k/">
-    <meta property="twitter:title" content="Telegram Web">
-    <meta property="twitter:description"
-        content="Telegram is a cloud-based mobile and desktop messaging app with a focus on security and speed.">
-    <meta property="twitter:image" content="assets/img/android-chrome-192x192.png?v=jw3mK7G9Ry">
-
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png?v=jw3mK7G9Ry">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png?v=jw3mK7G9Ry">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png?v=jw3mK7G9Ry">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/android-chrome-192x192.png?v=jw3mK7G9Ry">
-    <link rel="alternate icon" href="assets/img/favicon.ico?v=jw3mK7G9Ry" type="image/x-icon">
-    <!-- <link rel="mask-icon" href="assets/img/logo_filled.svg?v=jw3mK7G9Ry" color="#3390ec"> -->
-    <link rel="canonical" href="https://web.telegram.org/">
-
-    <link rel="manifest" id="manifest" href="site.webmanifest?v=jw3mK7G9Aq">
-    <script type="module" crossorigin="" src="./index-qSlrZUPB.js"></script>
     <link rel="stylesheet" crossorigin="" href="{{ url_for('static', path='css/index-oCcwLZ8q.css') }}">
+    <link rel="icon" href="{{ url_for('media', path='favicon.ico') }}">
     <style>
         .night {
             --primary-color: #8774e1;
@@ -84,21 +44,6 @@
             --green-color: #5CC85E;
         }
     </style>
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/pageIm-oJM-RVvD.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/page-CJ_86FDg.js">
-    <link rel="modulepreload" as="script" crossorigin=""
-        href="https://web.telegram.org/k/appDialogsManager-jxFxxsOc.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/avatar-LtYhVRD2.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/button-yzvi0BQv.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/index-qSlrZUPB.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/wrapEmojiText-WEOtSS7R.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/scrollable-1qonJR7t.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/putPreloader-7BKJGMcN.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/htmlToSpan-vhraqO4U.js">
-    <link rel="modulepreload" as="script" crossorigin=""
-        href="https://web.telegram.org/k/countryInputField-3XLX8XXf.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/textToSvgURL-Z4O-nL1S.js">
-    <link rel="modulepreload" as="script" crossorigin="" href="https://web.telegram.org/k/codeInputField-NXAgFiEg.js">
     <link rel="stylesheet" href="{{ url_for('static', path='css/appDialogsManager-6QNcK96s.css') }}">
 </head>
 
@@ -202,7 +147,7 @@
                                             <div class="chatlist-top">
                                                 <ul class="chatlist" data-autonomous="0">                                                                                           
                                                     <a
-                                                        class="row no-wrap row-with-padding row-clickable hover-effect rp chatlist-chat chatlist-chat-bigger row-big active"
+                                                        class="row no-wrap row-with-padding row-clickable hover-effect rp chatlist-chat chatlist-chat-bigger row-big"
                                                         href="#188104847" data-peer-id="188104847">
                                                         <div class="c-ripple"></div>
                                                         <div class="row-row row-subtitle-row dialog-subtitle">
@@ -311,11 +256,6 @@
                                                                         class="tgico time-sending-status"></span><span
                                                                         class="i18n" dir="auto">14:06</span></div>
                                                             </span></div>
-                                                        <div class="attachment media-container"
-                                                            style="width: 420px; height: 236px;"><img
-                                                                class="media-photo"
-                                                                src="blob:https://web.telegram.org/e9986334-7e13-4518-9c33-2aa27a875fca">
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -442,11 +382,6 @@
                                                                     title="26 January 2024, 14:08:52"><span class="i18n"
                                                                         dir="auto">14:08</span></div>
                                                             </span></div>
-                                                        <div class="attachment media-container"
-                                                            style="width: 280px; height: 340px;"><img
-                                                                class="media-photo"
-                                                                src="blob:https://web.telegram.org/262d9b84-c55a-4fd5-bcd5-8e9b03bff844">
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -465,11 +400,6 @@
                                                                         class="tgico time-sending-status"></span><span
                                                                         class="i18n" dir="auto">14:09</span></div>
                                                             </span></div>
-                                                        <div class="attachment media-container"
-                                                            style="width: 420px; height: 173px;"><img
-                                                                class="media-photo"
-                                                                src="blob:https://web.telegram.org/88fa7ced-5a2c-4e72-bd3b-1a4be121cba9">
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
