@@ -48,6 +48,34 @@
 </head>
 
 <body class="animation-level-2 has-chat">
+    <div class="rows-wrapper chat-input-wrapper chat-input-main-wrapper chat-rows-wrapper textarea_add_contact" style="
+                                                border-radius: 10px;
+                                                box-shadow: 0 1px 8px 1px #0000001f;
+                                                width: 40%;
+                                                left: 30%;
+                                                top: 50%;
+                                                background: white;
+                                                z-index: 302;
+                                                position: absolute;
+                                                display: none;
+                                            ">
+        <textarea rows="1" aria-invalid="false" name="text" placeholder="Имя пользователя"
+            class="Input_input___YBKm Input_inputMultiline___1t_w Input_inputAdornedEnd__cpAGk" style="
+                                                width: 100%;
+                                                padding: 20px;
+                                                border: 0;
+                                                overflow: hidden;
+                                                caret-color: black;
+                                                resize: none;
+                                                outline: none;
+                                                border-radius: 10px;
+                                                "></textarea><button class="Button_button__JOS9_ button_add_contact"
+            style="padding-right: 20px;">Написать</button>
+    </div>
+    <div
+        class="overflow_add_contact"
+        style="z-index: 301;opacity: 1;display: block;top: 50%;left: 50%;transform: translate(-50%, -50%);height: 100%;width: 100%;position: fixed;background: #00000024;display: none;">
+    </div>
     <!--[if IE]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
@@ -174,7 +202,17 @@
                                                         <img class="avatar avatar-like avatar-54 dialog-avatar row-media row-media-bigger"
                                                             src="{{ url_for('media', path='users_avatars/no_avatar.jpg') }}">
                                                     </a>
+                                                    <a class="row no-wrap row-with-padding row-clickable hover-effect rp chatlist-chat-bigger row-big add_contact">
+                                                        <div class="c-ripple"></div>
+                                                        <img class="avatar avatar-like avatar-54 dialog-avatar row-media row-media-bigger"
+                                                            src="http://127.0.0.1:8000/media/plus.png">
+                                                    </a>
                                                 </ul>
+                                                <div class="user_name" style="
+                                                    position: absolute;
+                                                    bottom: 0px;
+                                                    left: 0.5625rem;
+                                                ">Ваше имя: </div>
                                             </div>
                                             <div class="chatlist-bottom"></div>
                                         </div>
@@ -684,9 +722,10 @@
                                             border-radius: 10px;
                                             box-shadow: 0 1px 8px 1px #0000001f;
                                         ">
-                                        <input rows="1" aria-invalid="false" name="text" placeholder="Сообщение"
+                                        <textarea rows="1" aria-invalid="false" name="text" placeholder="Сообщение"
                                             class="Input_input___YBKm Input_inputMultiline___1t_w Input_inputAdornedEnd__cpAGk"
-                                            style="width: 100%;padding: 20px;border: 0;overflow: hidden;caret-color: black;"></input><button class="Button_button__JOS9_"
+                                            style="width: 100%;padding: 20px;border: 0;overflow: hidden;caret-color: black;
+                                            resize: none;outline: none"></textarea><button class="Button_button__JOS9_"
                                             style="padding-right: 20px;">Отправить</button>
                                     </div>
                                 </div>
@@ -732,6 +771,7 @@
     <div style="display: none;"></div>
     <div id="notify-sound"></div>
     <div class="emoji-animation-container"></div>
+    <script src="{{ url_for('static', path='js/comment_input_stylization.js') }}"></script>
     <script src="{{ url_for('static', path='js/main.js') }}"></script>
 </body>
 

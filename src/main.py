@@ -89,7 +89,38 @@ async def get_messages(request: Request, chat_id: str, user_id: str):
             )
         context = {'request': request, 'messages': messages}
         return templates.TemplateResponse("messages.html", context).body.decode()
+
+@app.post("/api/create_chat")
+async def create_chat(chat_name: str):        
+    async with MongoDBConnection(mongo_uri) as client:
+        db = client.get_database("messenger")
+        chats_collection = db.get_collection("chats")
+        new_chat = await chats_collection.insert_one({"name": chat_name})
+        return str(new_chat.inserted_id)
     
+@app.post("/api/create_chat_user")
+async def create_chat_user(user_id: str, chat_id: str):        
+    async with MongoDBConnection(mongo_uri) as client:
+        db = client.get_database("messenger")
+        chats_users_collection = db.get_collection("chats_users")
+        await chats_users_collection.insert_one({
+            "user_id": user_id, 
+            "chat_id": ObjectId(chat_id)
+        })
+
+@app.post("/api/create_message")
+async def create_message(request: Request, user_id: str, chat_id: str):        
+    async with MongoDBConnection(mongo_uri) as client:
+        db = client.get_database("messenger")
+        messages_collection = db.get_collection("messages")
+        data = await request.json()
+        await messages_collection.insert_one({
+            "user_id": user_id, 
+            "content": data,
+            "chat_id": ObjectId(chat_id),
+            "created_at": datetime.now()
+        })
+
 async def processing_documents():
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("messenger")
