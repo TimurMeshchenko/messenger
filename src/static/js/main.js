@@ -81,6 +81,7 @@ async function listen_input() {
   document
   .querySelector(".Button_button__JOS9_")
   .addEventListener("click", async () => {
+    const comment_textarea = document.querySelector(".comment_textarea");
     if (comment_textarea.value.length > 0) {
       const chat_id = document.querySelector(".chatlist-chat.active").dataset.peerId;
       const bubbles_date_group = document.querySelector(".bubbles-date-group");
@@ -119,8 +120,6 @@ function getCurrentTime() {
 }
 
 function listen_add_contact() {
-  const textarea_add_contact = document.querySelector(".textarea_add_contact");
-  const overflow_add_contact = document.querySelector(".overflow_add_contact");
   document.querySelector(".add_contact").addEventListener("click", () => {
     textarea_add_contact.style.display = "flex";
     overflow_add_contact.style.display = "block";
@@ -128,13 +127,59 @@ function listen_add_contact() {
   document
     .querySelector(".overflow_add_contact")
     .addEventListener("click", () => {
-      textarea_add_contact.style.display = "none";
-      overflow_add_contact.style.display = "none";
+      hide_add_contact_window();
     });
 }
 
+function hide_add_contact_window() {
+  textarea_add_contact.style.display = "none";
+  overflow_add_contact.style.display = "none";
+  textarea_add_contact.style.border = "";
+}
+
+async function listen_add_contact_button() {
+  button_add_contact.addEventListener("click", async() => {
+    const contact_user_id = contact_textarea.value;
+    const response = await fetch(
+      `/api/is_user_exists?user_id=${contact_user_id}`
+    );
+    const is_user_exists = await response.json();
+    const added_contacts = []
+    for (let chat_title of document.querySelectorAll(".peer-title")) {
+      added_contacts.push(chat_title.textContent);
+    }
+
+    if (
+      is_user_exists &&
+      contact_user_id != (await user_id) &&
+      !added_contacts.includes(contact_user_id)
+    ) {
+      hide_add_contact_window();
+      const chat_id = await get_response(
+        `/api/create_chat?chat_name=${contact_user_id}`
+      );
+      await get_response(
+        `/api/create_chat_user?user_id=${await user_id}&chat_id=${chat_id}`
+      );
+      await get_response(
+        `/api/create_chat_user?user_id=${contact_user_id}&chat_id=${chat_id}`
+      );
+      window.location.hash = `#${chat_id}`;
+      location.reload();
+    } else {
+      textarea_add_contact.style.border = "1px solid red";
+    }
+  });
+}
+
 const user_id = get_user_id_from_localstorage();
+const textarea_add_contact = document.querySelector(".textarea_add_contact");
+const overflow_add_contact = document.querySelector(".overflow_add_contact");
+const button_add_contact = document.querySelector(".button_add_contact");
+const contact_textarea = document.querySelector(".contact_textarea");
+
 load_chats();
 load_messages();
 listen_input();
 listen_add_contact();
+listen_add_contact_button();

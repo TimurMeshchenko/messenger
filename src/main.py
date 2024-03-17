@@ -52,13 +52,13 @@ async def get_chats(request: Request, user_id: str):
         chats = []
         async for document in chats_users_cursor:
             chat = await chats_collection.find_one({"_id": ObjectId(document['chat_id'])})
-            last_message = await messages_collection.find_one({"chat_id": chat['_id']}, sort=[("_id", -1)])
+            last_message = await messages_collection.find_one({"chat_id": chat['_id']}, sort=[("_id", -1)]) or {}
             chats.append(
                 {
                     'chat_id': str(chat['_id']),
                     'chat_name': chat['name'], 
-                    'last_message_content': last_message['content'], 
-                    'last_message_date': last_message['created_at'].strftime("%b %d")
+                    'last_message_content': last_message['content'] if 'content' in last_message else "", 
+                    'last_message_date': last_message['created_at'].strftime("%b %d") if 'created_at' in last_message else ""
                 }
             )
         context = {'request': request, 'chats': chats}
