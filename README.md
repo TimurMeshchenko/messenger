@@ -1,10 +1,28 @@
 # messenger
 
+# создание бд
+
+mongosh 
+use messenger
+db.createCollection("chats")
+db.createCollection("chats_users")
+db.createCollection("messages")
+
+cd mongodb_backup
+mongorestore --db=messenger .
+
+# Запуск
+
 poetry run python -m uvicorn main:app --reload
 sudo poetry run ./reload.sh
 
-from datetime import datetime
-created_at datetime.now()
+# cron задача по очистке бд
+
+crontab -e
+
+0 0 * * * /path/to/python3 /path/to/cron_clear_collections.py
+
+# mongosh комманды
 
 db.messages.insertOne({
     "user_id": "1",

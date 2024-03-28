@@ -1,5 +1,5 @@
 async function get_user_id_from_localstorage() {
-  let user_id = localStorage.getItem("user_id");
+  user_id = localStorage.getItem("user_id");
   const response = await fetch(`/api/is_user_exists?user_id=${user_id}`);
   const is_user_exists = await response.json();
   if (!user_id || !is_user_exists) {
@@ -8,7 +8,6 @@ async function get_user_id_from_localstorage() {
     await create_chat_with_admin(user_id); 
   }
   document.querySelector(".user_name").innerHTML += user_id;
-  return user_id;
 }
 
 async function create_chat_with_admin(user_id) {
@@ -16,7 +15,7 @@ async function create_chat_with_admin(user_id) {
   await get_response(
     `/api/create_chat_user?user_id=${user_id}&chat_id=${chat_id}`
   );
-  const admin_message = `Для проверки работоспособности, зайдите в режим инкогнито и получите новый аккаунт, с которым можно начать переписку.`;
+  const admin_message = `Для проверки работоспособности, зайдите в режим инкогнито и получите новый аккаунт, с которым можно начать переписку. Для создания нового чата, нажмите на зеленую кнопку плюс и введите имя в левом нижнем углу второго аккаунта`;
   await get_response(
     `/api/create_message?user_id=0&chat_id=${chat_id}`,
     admin_message
@@ -35,8 +34,7 @@ async function get_response(url, data=null) {
 }
 
 async function load_chats() {
-    // const response = await fetch("/api/get_chats?user_id=1");
-    const response = await fetch(`/api/get_chats?user_id=${await user_id}`);
+    const response = await fetch(`/api/get_chats?user_id=${user_id}`);
     const data = await response.json();
     const chatlist_ul = document.querySelector(".chatlist");
     chatlist_ul.insertAdjacentHTML('afterbegin', data)
@@ -49,10 +47,13 @@ function listen_chats_click() {
   for (let chat of chats) {
     if (chat_id == chat.dataset.peerId) {
       chat.classList.add("active");
+      document.querySelector(".chat-input.chat-input-main").style.display = "block";
     }
     chat.addEventListener("click", () => {
       document.querySelector(".chatlist-chat.active")?.classList.remove("active");
       chat.classList.add("active");
+      document.querySelector(".chat-input.chat-input-main").style.display =
+        "block";
       load_messages(chat.dataset.peerId);
     });
   }
@@ -69,41 +70,32 @@ async function load_messages(chat_element_id=null) {
   if (!chat_id) {
     return null;
   }
-  // const response = await fetch(`/api/get_messages?chat_id=${chat_id}&user_id=1`);
-  const response = await fetch(`/api/get_messages?chat_id=${chat_id}&user_id=${await user_id}`);
+  const response = await fetch(`/api/get_messages?chat_id=${chat_id}&user_id=${user_id}`);
   const data = await response.json();
   const bubbles_date_group_section = document.querySelector(".bubbles-date-group");
   bubbles_date_group_section.innerHTML = '';
   bubbles_date_group_section.insertAdjacentHTML("beforeend", data);
 }
 
-async function listen_input() {
+async function listen_input(ws) {
   document
   .querySelector(".Button_button__JOS9_")
   .addEventListener("click", async () => {
     const comment_textarea = document.querySelector(".comment_textarea");
     if (comment_textarea.value.length > 0) {
       const chat_id = document.querySelector(".chatlist-chat.active").dataset.peerId;
-      const bubbles_date_group = document.querySelector(".bubbles-date-group");
+      ws.send(
+        JSON.stringify({
+          recipient_id: document.querySelector(
+            ".chatlist-chat.active .peer-title"
+          ).textContent,
+          content: comment_textarea.value,
+          chat_id: chat_id,
+        })
+      );
       await get_response(
         `/api/create_message?user_id=${await user_id}&chat_id=${chat_id}`,
         comment_textarea.value
-      );
-      bubbles_date_group.insertAdjacentHTML(
-        "beforeend",
-        `<div class="bubbles-group">
-        <div class="bubble hide-name is-out can-have-tail is-group-first is-group-last" style="--peer-color-rgb: var(--peer-0-color-rgb); --peer-border-background: var(--peer-0-border-background);">
-            <div class="bubble-content-wrapper">
-                <div class="bubble-content">
-                    <div class="message spoilers-container" dir="auto">
-                        ${comment_textarea.value}
-                        <span class="time"><span class="i18n" dir="auto"></span>
-                            <div class="time-inner"><span class="i18n" dir="auto">${getCurrentTime()}</span></div>
-                        </span></div>
-                    </div>
-                </div>
-              </div>
-        </div>`
       );
       comment_textarea.value = '';
     }
@@ -113,8 +105,11 @@ async function listen_input() {
 function getCurrentTime() {
   const now = new Date();
   let hours = now.getHours();
-  const minutes = now.getMinutes();
+  let minutes = now.getMinutes();
   const meridiem = hours >= 12 ? "PM" : "AM";
+
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
 
   return `${hours}:${minutes} ${meridiem}`;
 }
@@ -137,7 +132,7 @@ function hide_add_contact_window() {
   textarea_add_contact.style.border = "";
 }
 
-async function listen_add_contact_button() {
+async function listen_add_contact_button(ws) {
   button_add_contact.addEventListener("click", async() => {
     const contact_user_id = contact_textarea.value;
     const response = await fetch(
@@ -151,7 +146,7 @@ async function listen_add_contact_button() {
 
     if (
       is_user_exists &&
-      contact_user_id != (await user_id) &&
+      contact_user_id != user_id &&
       !added_contacts.includes(contact_user_id)
     ) {
       hide_add_contact_window();
@@ -159,12 +154,20 @@ async function listen_add_contact_button() {
         `/api/create_chat?chat_name=${contact_user_id}`
       );
       await get_response(
-        `/api/create_chat_user?user_id=${await user_id}&chat_id=${chat_id}`
+        `/api/create_chat_user?user_id=${user_id}&chat_id=${chat_id}`
       );
       await get_response(
         `/api/create_chat_user?user_id=${contact_user_id}&chat_id=${chat_id}`
       );
       window.location.hash = `#${chat_id}`;
+
+      ws.send(
+        JSON.stringify({
+          type: "reload",
+          user_id: contact_user_id,
+          chat_id: chat_id
+        })
+      );
       location.reload();
     } else {
       textarea_add_contact.style.border = "1px solid red";
@@ -172,14 +175,59 @@ async function listen_add_contact_button() {
   });
 }
 
-const user_id = get_user_id_from_localstorage();
+function websocket_onmessage(ws) {
+  ws.onmessage = function (event) {
+    const response = JSON.parse(event.data);
+    if (response.type == 'reload') {
+      window.location.hash = `#${response.chat_id}`;
+      location.reload()
+    }
+    if (response.chat_id != get_chat_id_from_url()) {
+      return
+    }
+
+    document.querySelector(".bubbles-date-group").insertAdjacentHTML(
+      "beforeend",
+      `<div class="bubbles-group">
+      <div class="bubble hide-name can-have-tail is-group-first is-group-last" style="--peer-color-rgb: var(--peer-0-color-rgb); --peer-border-background: var(--peer-0-border-background);">
+          <div class="bubble-content-wrapper">
+              <div class="bubble-content">
+                  <div class="message spoilers-container" dir="auto">
+                      ${response.content}
+                      <span class="time"><span class="i18n" dir="auto"></span>
+                          <div class="time-inner"><span class="i18n" dir="auto">${getCurrentTime()}</span></div>
+                      </span></div>
+                  </div>
+              </div>
+            </div>
+      </div>`
+    );
+
+    const bubbles = document.querySelectorAll(".bubble");
+    const lastBubble = bubbles[bubbles.length - 1];
+    if (response.user_id == user_id) {
+      lastBubble.classList.add("is-out");
+    }
+    else {
+      lastBubble.classList.add("is-in");
+    }
+    document.querySelector(
+      ".chatlist-chat.active .dialog-subtitle-span"
+    ).textContent = response.content;
+  };
+}
+
 const textarea_add_contact = document.querySelector(".textarea_add_contact");
 const overflow_add_contact = document.querySelector(".overflow_add_contact");
 const button_add_contact = document.querySelector(".button_add_contact");
 const contact_textarea = document.querySelector(".contact_textarea");
 
-load_chats();
-load_messages();
-listen_input();
-listen_add_contact();
-listen_add_contact_button();
+get_user_id_from_localstorage().then(() => {
+  const ws = new WebSocket(`ws://localhost:8000/ws/${user_id}`);
+  load_chats();
+  load_messages();
+  listen_input(ws);
+  listen_add_contact();
+  listen_add_contact_button(ws);
+  websocket_onmessage(ws);
+});

@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -15,6 +16,8 @@ templates = Jinja2Templates(directory="../templates")
 
 mongo_uri = "mongodb://localhost:27017"
 
+connections = {}
+
 class MongoDBConnection:
     def __init__(self, mongo_uri):
         self.mongo_uri = mongo_uri
@@ -30,7 +33,6 @@ class MongoDBConnection:
 @app.get("/")
 async def main(request: Request):        
     context = {"request": request}
-    # await processing_documents()
     return templates.TemplateResponse("main.html", context)
 
 @app.get("/api/is_user_exists")
@@ -125,19 +127,27 @@ async def create_message(request: Request, user_id: str, chat_id: str):
             "created_at": datetime.now()
         })
 
-async def processing_documents():
-    async with MongoDBConnection(mongo_uri) as client:
-        db = client.get_database("messenger")
-        message_collection = db.get_collection("messages")
+@app.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: str) -> None:
+    await websocket.accept()
+    connections[user_id] = websocket
+    try:
+        while True:
+            data = await websocket.receive_json()
+            if data.get('type') and data['type'] == 'reload':
+                if data['user_id'] not in connections:
+                    continue
+                await connections[data['user_id']].send_json({
+                    "type": "reload",
+                    "chat_id": data['chat_id']
+                })
 
-        # message_collection.insert_one({"abc": "a"})
-        # message_collection.insert_many([{"abc": "a"}])
-        # message_collection.delete_one({"abc": "a"})
-        # await message_collection.update_one(
-        #     {"created_at": "abc"},
-        #     {"$set": {"created_at": datetime.now()}}
-        # )
-        # cursor = message_collection.find()
-        # cursor = message_collection.find({"a": "1", "b": "2"})
-        # async for document in cursor:
-        #     print(document)
+            for recipient_id in [user_id, data['recipient_id']]:
+                if recipient_id in connections:
+                    await connections[recipient_id].send_json({
+                        "user_id": user_id,
+                        "content": data['content'],
+                        "chat_id": data['chat_id'],
+                    }) 
+    except WebSocketDisconnect:
+        del connections[user_id]
