@@ -73,13 +73,21 @@ async def get_chats(request: Request, user_id: str):
 @app.get("/api/get_messages")
 async def get_messages(request: Request, chat_id: str, user_id: str):        
     async with MongoDBConnection(mongo_uri) as client:
+        try:
+            chat_id = ObjectId(chat_id)
+        except:
+            return ''        
         db = client.get_database("messenger")
+        chats_users_collection = db.get_collection("chats_users")
+        user_chat_participant = await is_user_chat_participant(chats_users_collection, chat_id, user_id)
+        
+        if not user_chat_participant:
+            return ''
+
         messages_collection = db.get_collection("messages")
         messages = []
-        try:
-            messages_cursor = messages_collection.find({"chat_id": ObjectId(chat_id)})
-        except:
-            return ''
+        messages_cursor = messages_collection.find({"chat_id": chat_id})
+
         async for document in messages_cursor:
             hours = document['created_at'].strftime("%H")
             minutes = document['created_at'].strftime("%M")
@@ -95,6 +103,15 @@ async def get_messages(request: Request, chat_id: str, user_id: str):
             )
         context = {'request': request, 'messages': messages}
         return templates.TemplateResponse("messages.html", context).body.decode()
+
+async def is_user_chat_participant(chats_users_collection, chat_id: str, user_id: str):   
+        chat_user = await chats_users_collection.find_one(
+            {
+                "chat_id": chat_id, 
+                "user_id": user_id
+            }
+        )
+        return bool(chat_user)
 
 @app.post("/api/create_chat")
 async def create_chat(chat_name: str):        
@@ -141,6 +158,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str) -> None:
                     "type": "reload",
                     "chat_id": data['chat_id']
                 })
+                return None
 
             for recipient_id in [user_id, data['recipient_id']]:
                 if recipient_id in connections:

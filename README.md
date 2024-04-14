@@ -1,6 +1,6 @@
 # messenger
 
-# создание бд
+# Настройка mongodb
 
 mongosh 
 use messenger
@@ -13,14 +13,16 @@ mongorestore --db=messenger .
 
 # Запуск
 
+sudo poetry install
+cd src
 poetry run python -m uvicorn main:app --reload
-sudo poetry run ./reload.sh
+sudo poetry run ./run_with_reload.sh
 
 # cron задача по очистке бд
 
 crontab -e
 
-0 0 * * * /path/to/python3 /path/to/cron_clear_collections.py
+0 0 * * * python /path/to/cron_clear_collections.py
 
 # mongosh комманды
 
@@ -37,13 +39,3 @@ db.chats_users.insertOne({
     "user_id": "1",
     "chat_id": "1"
 })
-
-db.messages.updateOne( 
-    {"chat_id": '1'}, 
-    {"$set": {"chat_id": ObjectId('65d220a834ddb6612a2b67a2')}} 
-)
-
-db.messages.updateOne( 
-    {"created_at": ISODate('2024-02-25T06:29:49.048Z')}, 
-    {"$set": {"created_at": "abc"}} 
-)
