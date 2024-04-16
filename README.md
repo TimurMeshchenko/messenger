@@ -15,7 +15,7 @@ mongorestore --db=messenger .
 
 sudo poetry install
 cd src
-poetry run python -m uvicorn main:app --reload
+sudo poetry run python -m uvicorn main:app --reload
 sudo poetry run ./run_with_reload.sh
 
 # cron задача по очистке бд
