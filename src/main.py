@@ -6,6 +6,10 @@ from fastapi.templating import Jinja2Templates
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -14,7 +18,7 @@ app.mount("/media", StaticFiles(directory=f"media"), name="media")
 
 templates = Jinja2Templates(directory="../templates")
 
-mongo_uri = "mongodb://localhost:27017"
+mongo_uri = f'mongodb://{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}'
 
 connections = {}
 

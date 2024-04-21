@@ -223,7 +223,7 @@ const button_add_contact = document.querySelector(".button_add_contact");
 const contact_textarea = document.querySelector(".contact_textarea");
 
 get_user_id_from_localstorage().then(() => {
-  const ws = new WebSocket(`ws://localhost:8000/ws/${user_id}`);
+  const ws = new WebSocket(`ws://${window.location.host}/ws/${user_id}`);
   load_chats();
   load_messages();
   listen_input(ws);

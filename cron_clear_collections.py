@@ -1,9 +1,13 @@
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 async def clear_collections():
     # Connect to MongoDB
-    client = AsyncIOMotorClient('mongodb://localhost:27017')
+    client = AsyncIOMotorClient(f'mongodb://{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}')
     db = client['messenger']
     
     # List all collection names
