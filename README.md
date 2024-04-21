@@ -20,9 +20,14 @@ sudo poetry run ./run_with_reload.sh
 
 # cron задача по очистке бд
 
+Установить в глобальное окружение 
+python-dotenv, motor.
+
 crontab -e
 
-0 0 * * * python /path/to/cron_clear_collections.py
+```bash
+* * * * 0 python /path/to/cron_clear_collections.py
+```
 
 # mongosh комманды
 
