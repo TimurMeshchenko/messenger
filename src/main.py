@@ -13,8 +13,8 @@ load_dotenv()
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory=f"static"), name="static")
-app.mount("/media", StaticFiles(directory=f"media"), name="media")
+app.mount("/messenger/static", StaticFiles(directory=f"static"), name="static")
+app.mount("/messenger/media", StaticFiles(directory=f"media"), name="media")
 
 templates = Jinja2Templates(directory="../templates")
 
@@ -34,12 +34,12 @@ class MongoDBConnection:
     async def __aexit__(self, *args):
         self.client.close()
 
-@app.get("/")
+@app.get("/messenger")
 async def main(request: Request):        
     context = {"request": request}
     return templates.TemplateResponse("main.html", context)
 
-@app.get("/api/is_user_exists")
+@app.get("/messenger/api/is_user_exists")
 async def is_user_exists(user_id: str):   
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("messenger")
@@ -47,7 +47,7 @@ async def is_user_exists(user_id: str):
         chat_user = await chats_users_collection.find_one({"user_id": user_id})
         return bool(chat_user)
 
-@app.get("/api/get_chats")
+@app.get("/messenger/api/get_chats")
 async def get_chats(request: Request, user_id: str):        
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("messenger")
@@ -74,7 +74,7 @@ async def get_chats(request: Request, user_id: str):
         context = {'request': request, 'chats': chats}
         return templates.TemplateResponse("chat.html", context).body.decode()
     
-@app.get("/api/get_messages")
+@app.get("/messenger/api/get_messages")
 async def get_messages(request: Request, chat_id: str, user_id: str):        
     async with MongoDBConnection(mongo_uri) as client:
         try:
@@ -117,7 +117,7 @@ async def is_user_chat_participant(chats_users_collection, chat_id: str, user_id
         )
         return bool(chat_user)
 
-@app.post("/api/create_chat")
+@app.post("/messenger/api/create_chat")
 async def create_chat(chat_name: str):        
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("messenger")
@@ -125,7 +125,7 @@ async def create_chat(chat_name: str):
         new_chat = await chats_collection.insert_one({"name": chat_name})
         return str(new_chat.inserted_id)
     
-@app.post("/api/create_chat_user")
+@app.post("/messenger/api/create_chat_user")
 async def create_chat_user(user_id: str, chat_id: str):        
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("messenger")
@@ -135,7 +135,7 @@ async def create_chat_user(user_id: str, chat_id: str):
             "chat_id": ObjectId(chat_id)
         })
 
-@app.post("/api/create_message")
+@app.post("/messenger/api/create_message")
 async def create_message(request: Request, user_id: str, chat_id: str):        
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("messenger")
@@ -148,7 +148,7 @@ async def create_message(request: Request, user_id: str, chat_id: str):
             "created_at": datetime.now()
         })
 
-@app.websocket("/ws/{user_id}")
+@app.websocket("/messenger/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: str) -> None:
     await websocket.accept()
     connections[user_id] = websocket
