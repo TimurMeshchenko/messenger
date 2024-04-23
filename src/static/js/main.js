@@ -230,7 +230,7 @@ const contact_textarea = document.querySelector(".contact_textarea");
 
 get_user_id_from_localstorage().then(() => {
   const ws = new WebSocket(
-    `ws://${window.location.host}/messenger/ws/${user_id}`
+    `ws://${window.location.host}:8003/ws/${user_id}`
   );
   load_chats();
   load_messages();
