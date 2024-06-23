@@ -41,9 +41,29 @@
         class="overflow_add_contact"
         style="z-index: 301;opacity: 1;display: block;top: 50%;left: 50%;transform: translate(-50%, -50%);height: 100%;width: 100%;position: fixed;background: #00000024;display: none;">
     </div>
-    <div class="whole page-chats" style="" id="page-chats">
-        <div id="main-columns" class="tabs-container" data-animation="navigation" style="">
+    <div class="whole page-chats" id="page-chats">
+        <div id="main-columns" class="tabs-container" data-animation="navigation">
             <div class="tabs-tab chatlist-container sidebar sidebar-left main-column" id="column-left">
+                <div id="searchBlock" class="header__search-catalog search-catalog j-search-catalog">
+                    <div class="search-catalog__block" style="position: relative;">
+                        <input autocomplete="off" id="searchInput" class="search-catalog__input j-wba-header-item" maxlength="300" placeholder="Поиск" style="
+                            font-size: 16px;
+                            line-height: 22px;
+                            color: #242424;
+                            width: 100%;
+                            padding: 9px 80px 9px 12px;
+                            margin: 0;
+                            background: #fff;
+                            appearance: none;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            border: 0;
+                            caret-color: black;
+                            border-bottom: 1px solid #dfe1e5;
+                        ">
+                    </div>
+                </div>
                 <div class="sidebar-slider tabs-container" data-animation="navigation">
                     <div class="tabs-tab sidebar-slider-item item-main active">
                         <div class="sidebar-content transition zoom-fade can-have-forum">
@@ -107,14 +127,48 @@
                                     <div
                                         class="rows-wrapper chat-input-wrapper chat-input-main-wrapper chat-rows-wrapper"
                                         style="
-                                            border-radius: 0px;
+                                            border-radius: 10px;
                                             box-shadow: 0 1px 8px 1px #0000001f;
                                         ">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            style="width: 35px;height: 35px;cursor: pointer;margin-right: 5px;margin-left: 5px;">
+                                            <circle cx="12" cy="12" r="10" stroke="black" stroke-width="1.5" />
+                                            <path d="M9 16C9.85038 16.6303 10.8846 17 12 17C13.1154 17 14.1496 16.6303 15 16" stroke="black" stroke-width="1.5"
+                                                stroke-linecap="round" />
+                                            <path
+                                                d="M16 10.5C16 11.3284 15.5523 12 15 12C14.4477 12 14 11.3284 14 10.5C14 9.67157 14.4477 9 15 9C15.5523 9 16 9.67157 16 10.5Z"
+                                                fill="black" />
+                                            <ellipse cx="9" cy="10.5" rx="1" ry="1.5" fill="black" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="_x32_"
+                                            viewBox="0 0 512 512" xml:space="preserve" style="width: 30px;height: 30px;cursor: pointer;">
+                                            <style type="text/css">
+                                                .st0 {
+                                                    fill: #000000;
+                                                }
+                                            </style>
+                                            <g>
+                                                <path class="st0"
+                                                    d="M157.644,298.25l150.407-150.415l-27-26.992l-150.4,150.399c-9.162,9.155-16.08,19.809-20.684,31.163   c-6.903,17.024-8.615,35.585-5.175,53.378c3.44,17.785,12.116,34.877,25.859,48.614c9.148,9.163,19.809,16.088,31.156,20.684   c17.031,6.895,35.585,8.615,53.377,5.167c17.793-3.432,34.878-12.108,48.614-25.852l184.454-184.454   c12.55-12.542,22.016-27.107,28.302-42.632c9.445-23.287,11.796-48.72,7.077-73.065c-4.695-24.345-16.552-47.692-35.371-66.513   c-12.542-12.549-27.115-22.001-42.632-28.302c-23.295-9.436-48.705-11.78-73.057-7.077c-24.352,4.703-47.7,16.56-66.513,35.387   L74.518,229.271c-16.134,16.134-28.294,34.855-36.376,54.801c-12.139,29.93-15.16,62.608-9.11,93.932   c6.058,31.292,21.27,61.284,45.486,85.484c16.126,16.133,34.847,28.295,54.8,36.384c29.923,12.131,62.609,15.16,93.917,9.094   c31.3-6.05,61.292-21.262,85.5-45.478L466.22,305.996l-26.994-26.993L281.734,436.495c-12.48,12.481-26.818,21.781-42.152,27.99   c-22.975,9.33-48.203,11.674-72.311,7.002c-24.117-4.688-47.039-16.286-65.752-34.992c-12.489-12.48-21.781-26.818-28.006-42.16   c-9.323-22.968-11.659-48.203-6.993-72.312c4.68-24.109,16.285-47.038,34.999-65.752L293.051,64.74   c8.888-8.889,19.078-15.502,29.984-19.924c16.339-6.629,34.299-8.295,51.452-4.977c17.16,3.334,33.439,11.575,46.772,24.885   c8.889,8.896,15.486,19.086,19.908,29.984c6.636,16.338,8.303,34.306,4.985,51.46c-3.334,17.153-11.576,33.439-24.893,46.772   L236.797,377.395c-5.502,5.494-11.78,9.566-18.5,12.298c-10.083,4.094-21.186,5.129-31.78,3.074   c-10.601-2.07-20.616-7.138-28.873-15.372c-5.502-5.502-9.566-11.781-12.29-18.508c-4.094-10.076-5.137-21.187-3.075-31.78   C144.349,316.506,149.402,306.491,157.644,298.25z" />
+                                            </g>
+                                        </svg>
                                         <textarea rows="1" aria-invalid="false" name="text" placeholder="Сообщение"
                                             class="Input_input___YBKm Input_inputMultiline___1t_w Input_inputAdornedEnd__cpAGk comment_textarea"
                                             style="width: 100%;padding: 20px;border: 0;overflow: hidden;caret-color: black;
-                                            resize: none;outline: none"></textarea><button class="Button_button__JOS9_"
-                                            style="padding-right: 20px;">Отправить</button>
+                                            resize: none;outline: none;border-radius: 10px;"></textarea>
+                                        <button class="Button_button__JOS9_">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" style="
+                                                height: 40px;
+                                                width: 40px;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                            ">
+                                                <path
+                                                    d="M11.5003 12H5.41872M5.24634 12.7972L4.24158 15.7986C3.69128 17.4424 3.41613 18.2643 3.61359 18.7704C3.78506 19.21 4.15335 19.5432 4.6078 19.6701C5.13111 19.8161 5.92151 19.4604 7.50231 18.7491L17.6367 14.1886C19.1797 13.4942 19.9512 13.1471 20.1896 12.6648C20.3968 12.2458 20.3968 11.7541 20.1896 11.3351C19.9512 10.8529 19.1797 10.5057 17.6367 9.81135L7.48483 5.24303C5.90879 4.53382 5.12078 4.17921 4.59799 4.32468C4.14397 4.45101 3.77572 4.78336 3.60365 5.22209C3.40551 5.72728 3.67772 6.54741 4.22215 8.18767L5.24829 11.2793C5.34179 11.561 5.38855 11.7019 5.407 11.8459C5.42338 11.9738 5.42321 12.1032 5.40651 12.231C5.38768 12.375 5.34057 12.5157 5.24634 12.7972Z"
+                                                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -84,10 +84,10 @@ async function load_messages(chat_element_id=null) {
 }
 
 async function listen_input(ws) {
-  document
-  .querySelector(".Button_button__JOS9_")
-  .addEventListener("click", async () => {
-    const comment_textarea = document.querySelector(".comment_textarea");
+  const comment_textarea = document.querySelector(".comment_textarea");
+  const send_message_button = document.querySelector(".Button_button__JOS9_")
+
+  send_message_button.addEventListener("click", async () => {
     if (comment_textarea.value.length > 0) {
       const chat_id = document.querySelector(".chatlist-chat.active").dataset.peerId;
       ws.send(
@@ -105,6 +105,13 @@ async function listen_input(ws) {
       );
       comment_textarea.value = '';
     }
+  });
+
+  comment_textarea.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' || event.keyCode === 13) {
+          event.preventDefault();
+          send_message_button.click();
+      }
   });
 }
 

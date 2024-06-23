@@ -3599,7 +3599,6 @@ body.animation-level-0 .chat {
   width: calc(100% - (var(--chat-input-size) + 0.5rem));
   max-width: calc(100% - (var(--chat-input-size) + 0.5rem));
   justify-content: center;
-  border-radius: var(--chat-input-border-radius);
   min-height: var(--chat-input-size);
   max-height: 30rem;
   flex: 0 0 auto;
@@ -3787,7 +3786,6 @@ body.animation-level-0 .chat {
 }
 .rows-wrapper {
   transform: translate(0) scaleX(1);
-  border-end-end-radius: 0;
 }
 .rows-wrapper .bubble-tail {
   opacity: 1;
