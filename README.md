@@ -44,3 +44,15 @@ db.chats_users.insertOne({
     "user_id": "1",
     "chat_id": "1"
 })
+
+# Webpack optimization
+
+docker build -f Dockerfile.webpack -t messenger_webpack .
+docker run --name messenger_webpack_container -p 8080:8080 -v ./optimized:/app/optimized -v ./webpack.config.js:/app/webpack.config.js -d messenger_webpack
+sudo docker exec -it messenger_webpack_container bash
+
+npx webpack
+
+sudo docker stop messenger_webpack_container
+sudo docker rm messenger_webpack_container
+sudo docker rmi messenger_webpack

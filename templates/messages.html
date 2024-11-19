@@ -1,11 +1,11 @@
 {% for message in messages %}
 <div class="bubbles-group">
-    <div
-        {% if message['message_owner'] %}
-            class="bubble hide-name is-out can-have-tail is-group-first is-group-last"
-        {% else %}
-            class="bubble hide-name is-in can-have-tail is-group-first is-group-last"
-        {% endif %}
+    {% if message['message_owner'] %}
+        {% set bubble_class = "bubble hide-name is-out can-have-tail is-group-first is-group-last" %}
+    {% else %}
+        {% set bubble_class = "bubble hide-name is-in can-have-tail is-group-first is-group-last" %}
+    {% endif %}
+    <div class="{{ bubble_class }}"        
         style="--peer-color-rgb: var(--peer-0-color-rgb); --peer-border-background: var(--peer-0-border-background);">
         <div class="bubble-content-wrapper">
             <div class="bubble-content">
