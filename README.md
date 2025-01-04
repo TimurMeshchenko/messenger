@@ -18,6 +18,14 @@ cd src
 poetry run python -m uvicorn main:app --reload --port 8003
 poetry run ./run_with_reload.sh
 
+Прод:
+messenger/src/static/js/main.js
+const ws = new WebSocket(
+  `wss://${window.location.host}/messenger/ws/${user_id}`
+);
+
+poetry run python -m uvicorn main:app --port 8003 --ssl-keyfile /etc/letsencrypt/live/meshchenko.ru/privkey.pem --ssl-certfile /etc/letsencrypt/live/meshchenko.ru/fullchain.pem
+
 # cron задача по очистке бд
 
 Установить в глобальное окружение 
